@@ -1,0 +1,20 @@
+services:
+  docker_practice_postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: ny_taxi
+    volumes:
+      - ./data/ny_taxi:/var/lib/postgresql/data
+  
+  docker_practice_pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - ./data/pgadmin:/var/lib/pgadmin
+    ports:
+      - "8080:80"
+

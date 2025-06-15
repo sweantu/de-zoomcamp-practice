@@ -1,0 +1,44 @@
+id: loop_multiple_times
+namespace: zoomcamp
+
+inputs:
+  - id: taxi_types
+    type: ARRAY
+    itemType: STRING
+    defaults:
+      - green
+
+  - id: years
+    type: ARRAY
+    itemType: INT
+    defaults:
+      - 2020
+
+  - id: months
+    type: ARRAY
+    itemType: STRING
+    defaults:
+      ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]
+
+tasks:
+  - id: types
+    type: io.kestra.plugin.core.flow.ForEach
+    values: "{{inputs.taxi_types}}"
+    tasks:
+      - id: year
+        type: io.kestra.plugin.core.flow.ForEach
+        values: "{{inputs.years}}"
+        tasks:
+          - id: month
+            type: io.kestra.plugin.core.flow.ForEach
+            values: "{{inputs.months}}"
+            tasks:
+              - id: subflow
+                type: io.kestra.plugin.core.flow.Subflow
+                flowId: 06_gcp_taxi
+                namespace: zoomcamp
+                inputs:
+                  taxi: "{{parents[1].taskrun.value }}"
+                  year: "{{parents[0].taskrun.value}}"
+                  month: "{{taskrun.value}}"
+                wait: true

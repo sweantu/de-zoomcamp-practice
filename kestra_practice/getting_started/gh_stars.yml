@@ -1,0 +1,40 @@
+id: gh_stars
+namespace: kestra_practice
+
+inputs:
+  - id: kestra_logo
+    type: STRING
+    defaults: https://avatars.githubusercontent.com/u/59033362?s=48&v=4
+
+  - id: webhook_url
+    type: STRING
+    defaults: https://discord.com/api/webhooks/1344663021548732438/oQHTW2svwNl0PGloaSYr6E0tWm_E4VOaPZKoboJGjh-H_CPwz24hi0VMLO2KAVIZ8g1f
+
+tasks:
+  - id: python_script
+    type: io.kestra.plugin.scripts.python.Commands
+    namespaceFiles:
+      enabled: true
+    beforeCommands:
+      - python3 -m venv .venv
+      - . .venv/bin/activate
+      - pip install -r scripts/requirements.txt
+    commands:
+      - python scripts/api_example.py
+
+  - id: out_scripts
+    type: io.kestra.plugin.core.log.Log
+    message: "Number of starts is {{ outputs.python_script.vars.gh_stars }}"
+
+  - id: send_notification
+    type: io.kestra.plugin.notifications.discord.DiscordExecution
+    content: "Total of Github Stars: {{outputs.python_script.vars.gh_stars}}"
+    username: Kestra
+    avatarUrl: "{{inputs.kestra_logo}}"
+    url: "{{inputs.webhook_url}}"
+
+triggers:
+  - id: auto_send_noti
+    type: io.kestra.plugin.core.trigger.Schedule
+    cron: "* * * * *"
+    disabled: true
