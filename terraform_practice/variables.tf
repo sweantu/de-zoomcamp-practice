@@ -1,21 +1,21 @@
 variable "credentials" {
   description = "The path to the GCP credentials file"
-  default = "~/.gcp/airbnb-de-zoomcamp-2f68e8307ebc.json"
+  default = "~/.gcp/develop@airbnb-dez-project.json"
 }
 
 variable "project" {
   description = "The project ID to deploy resources to"
-  default = "airbnb-de-zoomcamp"
+  default = "airbnb-dez-project"
 }
 
 variable "region" {
   description = "The region to deploy resources to"
-  default = "us-east1"
+  default = "us-central1"
 }
 
 variable "bucket_name" {
   description = "The name of the bucket to deploy resources to"
-  default = "airbnb-de-zoomcamp-bucket"
+  default = "airbnb-dez-project-bucket"
 }
 
 variable "location" {
@@ -26,7 +26,7 @@ variable "location" {
 
 variable "dataset_id" {
   description = "The ID of the dataset to deploy resources to"
-  default = "airbnb_de_zoomcamp_dataset"
+  default = "airbnb_dez_project_dataset"
 }
 
 
