@@ -1,20 +1,20 @@
 import os
 import sys
+import time
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
-from google.cloud import storage
-from google.api_core.exceptions import NotFound, Forbidden
-import time
 
+from google.api_core.exceptions import Forbidden, NotFound
+from google.cloud import storage
 
 # Change this to your bucket name
-BUCKET_NAME = "gcp-practice-16925-bigquery-bucket"
+BUCKET_NAME = "airbnb-dez-project-bucket"
 
 # If you authenticated through the GCP SDK you can comment out these two lines
 # CREDENTIALS_FILE = "gcs.json"
 # client = storage.Client.from_service_account_json(CREDENTIALS_FILE)
 # If commented initialize client with the following
-client = storage.Client(project="gcp-practice-16925")
+client = storage.Client(project="airbnb-dez-project")
 
 
 BASE_URL = "https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_2024-"
@@ -34,7 +34,7 @@ def download_file(month):
 
     try:
         print(f"Downloading {url}...")
-        # urllib.request.urlretrieve(url, file_path)
+        urllib.request.urlretrieve(url, file_path)
         print(f"Downloaded: {file_path}")
         return file_path
     except Exception as e:
@@ -61,7 +61,7 @@ def create_bucket(bucket_name):
 
     except NotFound:
         # If the bucket doesn't exist, create it
-        bucket = client.create_bucket(bucket_name, location="asia-southeast1")
+        bucket = client.create_bucket(bucket_name, location="us")
         print(f"Created bucket '{bucket_name}'")
     except Forbidden:
         # If the request is forbidden, it means the bucket exists but you don't have access to see details
